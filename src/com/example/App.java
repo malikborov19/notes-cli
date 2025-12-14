@@ -6,6 +6,7 @@ public class App {
         String cmd = null;
         String text = null;
 
+        // Получаем аргументы
         for (String arg : args) {
             if (arg.startsWith("--cmd=")) {
                 cmd = arg.substring(6);
@@ -25,7 +26,27 @@ public class App {
                 } else {
                     notes.forEach(System.out::println);
                 }
-            } else {
+            } 
+            // ====== НОВАЯ КОМАНДА RM ======
+            else if ("rm".equals(cmd)) {
+                int id = -1;
+                for (String arg : args) {
+                    if (arg.startsWith("--id=")) {
+                        id = Integer.parseInt(arg.substring(5));
+                    }
+                }
+                if (id == -1) {
+                    System.out.println("ID not provided");
+                } else {
+                    boolean ok = NotesStore.remove(id);
+                    if (ok) {
+                        System.out.println("Removed #" + id);
+                    } else {
+                        System.out.println("Not found #" + id);
+                    }
+                }
+            } 
+            else {
                 System.out.println("Unknown command");
             }
         } catch (Exception e) {

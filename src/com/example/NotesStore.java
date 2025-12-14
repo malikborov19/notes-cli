@@ -44,4 +44,36 @@ public class NotesStore {
         String last = notes.get(notes.size() - 1);
         return Integer.parseInt(last.split(";")[0]) + 1;
     }
+
+    // ====== НОВЫЙ МЕТОД ======
+public static boolean remove(int id) throws IOException {
+    File file = new File(FILE_PATH);
+    if (!file.exists()) {
+        return false;
+    }
+
+    List<String> notes = list();
+    boolean removed = false;
+
+    Iterator<String> iterator = notes.iterator();
+    while (iterator.hasNext()) {
+        String line = iterator.next();
+        int noteId = Integer.parseInt(line.split(";")[0]);
+        if (noteId == id) {
+            iterator.remove();
+            removed = true;
+            break;
+        }
+    }
+
+    if (removed) {
+        try (FileWriter fw = new FileWriter(file, false)) {
+            for (String line : notes) {
+                fw.write(line + "\n");
+            }
+        }
+    }
+
+    return removed;
+    }   
 }
